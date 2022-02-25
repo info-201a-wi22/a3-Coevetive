@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ```{r, source, echo = FALSE, warning=FALSE, include=FALSE}
 source("../source/analysis.R")
 ```
@@ -31,3 +32,38 @@ us_percent_pop_stream_graph
 ```{r, chart_3, echo = FALSE, warning=FALSE, message=FALSE}
 
 ```
+=======
+```{r, source, echo = FALSE, warning=FALSE, include=FALSE}
+source("../source/analysis.R")
+```
+
+# SUMMARY PARAGRAPH
+
+An introduction of the problem domain and a description of the variable(s) you are choosing to analyze (and why!)
+
+A paragraph of summary information, citing at least 5 values calculated from the data
+A chart that shows trends over time for a variable of your choice
+
+A chart that compares two variables to one another
+
+A map that shows how your measure of interest varies geographically
+
+# TREND CHARTS
+
+## CHART 1
+```{r, chart_1, echo = FALSE, warning=FALSE, message=FALSE}
+us_percent_pop_stream_graph
+```
+
+# VARIABLE COMPARISON CHART
+
+```{r, chart_2, echo = FALSE, warning=FALSE, message=FALSE}
+
+```
+
+# MAP
+
+```{r, chart_3, echo = FALSE, warning=FALSE, message=FALSE}
+
+```
+>>>>>>> dcb9492d46a5a774fee768846370683b25108c7f
