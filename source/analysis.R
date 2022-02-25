@@ -7,7 +7,8 @@ library(plotly)
 library(reshape2)
 library(wesanderson)
 
-setwd("C:/Users/liama/Downloads/INFO 201 Workspace/a3-Coevetive/source")
+# setwd("C:/Users/liama/Downloads/INFO 201 Workspace/a3-Coevetive/source")
+setwd("D:/Downloads/INFO Workspace/a3-Coevetive/source")
 
 read_incarceration_trends <- function(){
   # USE FOR ONLINE VERSION:
@@ -158,7 +159,12 @@ pop_by_race_and_county_type <- incarceration_trends %>%
   select(aapi_pop_15to64, black_pop_15to64, latinx_pop_15to64, native_pop_15to64, white_pop_15to64, urbanicity) %>% 
   melt(id.vars=c("urbanicity"))
 
-ggplot(data = pop_by_race_and_county_type, mapping = aes(x = urbanicity, y = value, color = variable))
+temp <- incarceration_trends %>% 
+  filter(year == "2018" & state == "WA") %>% 
+  select(black_pop_15to64, white_pop_15to64)
+
+ggplot(data = temp, mapping = aes(x = black_pop_15to64, y = white_pop_15to64)) +
+  geom_point()
 
 # --- MAP CODE ---
 
