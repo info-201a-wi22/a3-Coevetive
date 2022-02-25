@@ -1,3 +1,5 @@
+# --- LIBRARIES ---
+
 library(dplyr)
 library(tidyverse)
 library(ggplot2)
@@ -7,8 +9,10 @@ library(plotly)
 library(reshape2)
 library(wesanderson)
 
-# setwd("C:/Users/liama/Downloads/INFO 201 Workspace/a3-Coevetive/source")
-setwd("D:/Downloads/INFO Workspace/a3-Coevetive/source")
+setwd("C:/Users/liama/Downloads/INFO 201 Workspace/a3-Coevetive/source")
+# setwd("D:/Downloads/INFO Workspace/a3-Coevetive/source")
+
+# --- PULLING DATA ---
 
 read_incarceration_trends <- function(){
   # USE FOR ONLINE VERSION:
@@ -136,7 +140,7 @@ prision_pop_by_race <- incarceration_trends %>%
 us_percent_pop_stream_graph <- ggplot(data = prision_pop_by_race, aes(x = year, y = prop_num, fill = pop_type)) +
   geom_stream(type = "proportional", color = 1, lwd = 0.25) +
   labs(
-    title = "Population Percentage By Race in US",
+    title = "Population Percentage By Race in US (1990-2018)",
     subtitle = "Measured in Percentage of Total Prison Population",
     x = "Years",
     y = "% of Pop",
@@ -154,34 +158,65 @@ Pacific Islander",
 
 # --- VARIABLE COMPARISION CODE ---
 
-pop_by_race_and_county_type <- incarceration_trends %>%
-  filter(year == "2018") %>%
-  select(aapi_pop_15to64, black_pop_15to64, latinx_pop_15to64, native_pop_15to64, white_pop_15to64, urbanicity) %>%
-  melt(id.vars=c("urbanicity"))
+black_vs_white_pop_prision_data <- incarceration_trends %>%
+  filter(year == "2018",
+         urbanicity != "") %>%
+  select(total_jail_pop, white_jail_pop, black_jail_pop, urbanicity, state, county_name) %>%
+  mutate(white_jail_prop = (white_jail_pop / total_jail_pop) * 100,
+         black_jail_prop = (black_jail_pop / total_jail_pop) * 100) %>%
+  filter(white_jail_prop <= 100,
+         black_jail_prop <= 100) %>% 
+  unite(col="state_county", c('state','county_name'), sep = ", ")
 
-temp <- incarceration_trends %>%
-  filter(year == "2018" & state == "WA") %>%
-  select(black_pop_15to64, white_pop_15to64)
+black_vs_white_pop_prision_plot <- ggplot(data = black_vs_white_pop_prision_data, mapping = aes(x = white_jail_prop, y = black_jail_prop, color = urbanicity, stat_county = state_county)) +
+  geom_point() +
+  scale_color_brewer() +
+  labs(
+    title = "Black Jail Population % vs White Jail Population % (2018)",
+    subtitle = "Colored by County Type",
+    color = "County Type",
+    x = "Black Jail Population %",
+    y = "White Jail Population %",
+    caption = "Source: Vera Institute of Justice"
+  )+
+  theme_minimal()
 
-ggplot(data = temp, mapping = aes(x = black_pop_15to64, y = white_pop_15to64)) +
-  geom_point()
+black_vs_white_pop_prision_plot <- ggplotly(black_vs_white_pop_prision_plot, tooltip = c("x", "y", "state_county"))
 
 # --- MAP CODE ---
 
-# Clean data and merge map_data to dataset.
+# Combine map_data with dataset.
 
 us_county_shapes <- map_data("county") %>%
   unite(col="polyname", c('region','subregion'), sep = ",") %>%
   left_join(county.fips, by = "polyname")
 
+# Filter data for graphing.
+
 incarceration_map_data <- incarceration_trends %>%
-  filter(year == 2018,
-         state == "WA") %>%
+  filter(year == 2018) %>%
+  select(black_pop_15to64, total_pop_15to64, fips) %>% 
+  mutate(black_prop_15to64 = (black_pop_15to64 / total_pop_15to64) * 100) %>%
+  mutate(black_prop_15to64 = ifelse(black_prop_15to64 <= 100, black_prop_15to64, NA)) %>% 
   left_join(us_county_shapes, by = "fips")
+
 
 # Create map plot.
 
-incarceration_map <- ggplot(data = incarceration_map_data) +
-  geom_polygon(mapping = aes(x = long, y = lat, group = group, fill = log(black_pop_15to64, 10)), color = NA) +
+percent_black_jail_map <- ggplot(data = incarceration_map_data) +
+  geom_polygon(mapping = aes(x = long, 
+                             y = lat, 
+                             group = group, 
+                             fill = black_prop_15to64), 
+               color = NA) +
   coord_map()+
-  theme_void()
+  scale_fill_distiller() +
+  theme_void() +
+  labs(
+    title = "% Black Prisoners of Total Prision Population in US (2018)",
+    fill = "% Black of Total Pop.",
+    x = "Black Jail Population %",
+    y = "White Jail Population %",
+    caption = "Source: Vera Institute of Justice"
+  )
+
