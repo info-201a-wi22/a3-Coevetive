@@ -9,8 +9,8 @@ library(plotly)
 library(reshape2)
 library(wesanderson)
 
-setwd("C:/Users/liama/Downloads/INFO 201 Workspace/a3-Coevetive/source")
-# setwd("D:/Downloads/INFO Workspace/a3-Coevetive/source")
+# setwd("C:/Users/liama/Downloads/INFO 201 Workspace/a3-Coevetive/source")
+setwd("D:/Downloads/INFO Workspace/a3-Coevetive/source")
 
 # --- PULLING DATA ---
 
@@ -73,7 +73,7 @@ highest_black_pop_year <- incarceration_trends %>%
   # pull year
   pull(year)
 
-# The lowest recorded black population was 28,834,577!
+# The highest recorded black population was 28,834,577!
 highest_black_pop_num <- incarceration_trends %>%
   # group by year
   group_by(year) %>%
@@ -175,8 +175,8 @@ black_vs_white_pop_prision_plot <- ggplot(data = black_vs_white_pop_prision_data
     title = "Black Jail Population % vs White Jail Population % (2018)",
     subtitle = "Colored by County Type",
     color = "County Type",
-    x = "Black Jail Population %",
-    y = "White Jail Population %",
+    x = "White Jail Population %",
+    y = "Black Jail Population %",
     caption = "Source: Vera Institute of Justice"
   )+
   theme_minimal()

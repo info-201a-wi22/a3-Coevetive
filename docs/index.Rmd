@@ -2,35 +2,39 @@
 source("../source/analysis.R")
 ```
 
-# INTRO PARAGRAPH
+# Analysis of US Jail Populations by Race
+Liam Dale
 
-An introduction of the problem domain and a description of the variable(s) you are choosing to analyze (and why!)
+### --- Introduction and Summary ---
 
-# SUMMARY PARAGRAPH
+Racial injustice has long plagued the United States and still persists today, nowhere is this more clear than the United States prison system. This will be an analysis of US jail populations nationwide using the non-profit organization the Vera of Institute of Justice's data set. The data set contains a multitude of variables relating to incarceration in the United States. 
 
-A paragraph of summary information, citing at least 5 values calculated from the data
+For my summary I chose to look at the change in black and white prisoners from 2017 to 2018 nationwide, the highest and lowest years of black prisoner populations nationwide. After cleaning and analyzing the data I found that the change in white prisoners from 2017 to 2018 was a decrease of `r format(abs(avg_change_in_white_prision_pop_2017_2018), scientific = FALSE, big.mark=",")` nationally, while the change in black prisoners actually rose by `r format(avg_change_in_black_prision_pop_2017_2018, scientific = FALSE, big.mark=",")` nationally. Additionally, I found the years of the highest and lowest black prison population actually exist at both ends of the data set, with the highest being in 2018 (the latest recorded populations from the data set) with a population of `r format(highest_black_pop_num, scientific = FALSE, big.mark=",")`, and the lowest being in 1990 (the earliest recorded population from the data set) with a population of `r format(lowest_black_pop_num, scientific = FALSE, big.mark=",")`. That is an increase of `r format(high_low_black_pop_diff, scientific = FALSE, big.mark=",")` black prisoners nationally! These statistics highlight a trend in US prison populations, with white prison populations decreasing and non-white prison populations rising, which I will continue to explore further with my charts.
 
-# TREND CHARTS
+### --- Charts ---
 
-## CHART 1
+#### US Jail Population % by Race Over Time (1990-2018)
+
 ```{r, chart_1, echo = FALSE, warning=FALSE, message=FALSE}
 us_percent_pop_stream_graph
 ```
 
-A chart that shows trends over time for a variable of your choice
+I chose to include this stream chart as it provides a visually simple way to show the trend I discovered earlier in my analysis. The trend being that from 1990 to 2018 white prison populations have been decreasing nationally while other non-white prison populations have increased nationally.
 
-# VARIABLE COMPARISON CHART
+#### White Jail Pop. % vs Black Jail Pop. % Scatterplot (2018)
 
 ```{r, chart_2, echo = FALSE, warning=FALSE, message=FALSE}
 black_vs_white_pop_prision_plot
 ```
 
-A chart that compares two variables to one another
+Why did you include the chart? What patterns emerged?
 
-# MAP
+I decided to include this chart as it provides a visually interesting way to show the difference in white and black prison populations between rural counties and urban counties. An interesting trend that I discovered when plotting this data is that urban counties tended to have much higher black prison population percentages than rural counties. 
+
+#### Map of Black Jail Population Percentage Nationally (2018)
 
 ```{r, chart_3, echo = FALSE, warning=FALSE, message=FALSE}
 percent_black_jail_map
 ```
 
-A map that shows how your measure of interest varies geographically
+I chose to chart black population _percentages_ throughout my charts mainly because it leveled the playing field between counties with widely varying populations, which provided easier charting of the demographic makeup of the prisons in US counties. A fascinating trend I found when creating this map was that the majority of high percentage black prison populations landed solely in historically Jim Crow practicing states.
